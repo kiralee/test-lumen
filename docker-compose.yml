@@ -1,0 +1,41 @@
+version: "3"
+services:
+        web_server:
+                image: nginx:latest
+                container_name: container_nginx
+                ports:
+                        - 8888:80
+                volumes:
+                        - ./config/nginx/:/etc/nginx/conf.d
+                        - ./src:/var/www/src
+                depends_on:
+                        - php_fpm_8_0_6
+        php_fpm_8_0_6:
+                build:
+                        args:
+                                user: leminhtam
+                                uid: 1000
+                        context: .
+                        dockerfile: ./DockerFiles/phpDockerFile
+                container_name: container_php_fpm
+                restart: unless-stopped
+                volumes:
+                        - ./src:/var/www/src
+                ports:
+                        - 9000:9000
+        percona_server:
+                image: percona/percona-server:latest
+                container_name: container_percona_mysql
+                command: --default-authentication-plugin=mysql_native_password
+                restart: always
+                ports:
+                        - 3366:3306
+                environment:
+                        MYSQL_ROOT_PASSWORD: root@123
+                        MYSQL_USER: leminhtam
+                        MYSQL_PASSWORD: Leminhtam@123
+                        INIT_TOKUDB: "yes"
+                        INIT_ROCKSDB: "yes"
+                volumes:
+                        - ./var/lib/mysql:/var/lib/mysql
+                        - ./var/log/mysql:/var/log/mysql

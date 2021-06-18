@@ -1,0 +1,32 @@
+FROM php:8.0.6-fpm
+
+ARG user
+ARG uid
+
+RUN apt-get update \
+    && apt-get install -y \
+    openssl \
+    libssl-dev \
+    libcurl4-openssl-dev \
+    libfreetype6-dev \
+    libicu-dev \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libpng-dev \
+    libxslt1-dev \
+    sudo \
+    libzip-dev \
+    libonig-dev \
+    # install Extensions
+    && docker-php-ext-install dom pdo_mysql opcache mbstring intl simplexml gd bcmath soap xsl zip \
+    # cleanup
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+USER $user
+WORKDIR /var/www/src
+EXPOSE 9000
