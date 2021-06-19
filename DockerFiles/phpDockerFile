@@ -1,8 +1,5 @@
 FROM php:8.0.6-fpm
 
-ARG user
-ARG uid
-
 RUN apt-get update \
     && apt-get install -y \
     openssl \
@@ -19,14 +16,17 @@ RUN apt-get update \
     libonig-dev \
     # install Extensions
     && docker-php-ext-install dom pdo_mysql opcache mbstring intl simplexml gd bcmath soap xsl zip \
+    # install XDebug
+    && pecl install xdebug \
+        && docker-php-ext-enable xdebug \
+        && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/xdebug.ini \
+        && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
+        && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/xdebug.ini \
+        && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini \
+        && echo "xdebug.idekey=leminhtam" >> /usr/local/etc/php/conf.d/xdebug.ini \
+        && echo "xdebug.remote_handler=docker_leminhtam" >> /usr/local/etc/php/conf.d/xdebug.ini \
     # cleanup
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
-USER $user
 WORKDIR /var/www/src
-EXPOSE 9000

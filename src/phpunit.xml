@@ -9,6 +9,18 @@
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./app/Domains</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">./app/Domains/*/routes</directory>
+            <directory suffix=".php">./app/Domains/*/Providers</directory>
+        </exclude>
+        <report>
+            <html outputDirectory="reports/coverage"/>
+        </report>
+    </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>

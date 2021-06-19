@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domains\Order\Providers\OrderProvider;
+use App\Domains\Wager\Providers\WagerProvider;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->register(WagerProvider::class);
+        $this->app->register(OrderProvider::class);
     }
 }
