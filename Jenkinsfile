@@ -3,6 +3,7 @@ pipeline {
     stages {
         stage('Prepare Code') {
             steps {
+                sh 'cd /var/www/test-lumen'
                 sh 'git checkout main'
                 sh 'git pull'
             }
@@ -34,7 +35,7 @@ pipeline {
             slackSend (color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful")
         }
         failure {
-           slackSend (color: "danger", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was failed. ${env}")
+           slackSend (color: "danger", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was failed.")
         }
     }
 }
