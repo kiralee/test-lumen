@@ -10,6 +10,9 @@ pipeline {
         stage('Testing') {
             steps {
                 sh 'docker exec container_php_fpm composer test'
+                failure {
+                     slackSend (color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful")
+                }
             }
         }
         stage('Deploy') {
