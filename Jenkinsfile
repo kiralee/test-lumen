@@ -1,6 +1,12 @@
 pipeline {
     agent any
     stages {
+        stage('Prepare Code') {
+            steps {
+                sh 'git checkout main'
+                sh 'git pull'
+            }
+        }
         stage('Building') {
             steps {
                 sh 'docker exec container_php_fpm composer install'
@@ -11,16 +17,13 @@ pipeline {
             steps {
                 sh 'docker exec container_php_fpm composer test'
             }
-//             post {
-//                 success {
-//                     slackSend (color: "danger", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was failed")
-//                 }
-//                 failure {
-//                     slackSend (color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful")
-//                 }
-//             }
+            post {
+                failure {
+                    slackSend (color: "danger", message: "Testing failed")
+                }
+            }
         }
-        stage('Deploy') {
+        stage('Deploy to Stagging') {
             steps {
                 echo "Deployed"
             }
@@ -31,7 +34,7 @@ pipeline {
             slackSend (color: "good", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was successful")
         }
         failure {
-           slackSend (color: "danger", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was failed")
+           slackSend (color: "danger", message: "Job: ${env.JOB_NAME} with buildnumber ${env.BUILD_NUMBER} was failed. ${env}")
         }
     }
 }
