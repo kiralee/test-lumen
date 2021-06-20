@@ -1,13 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Prepare Code') {
-            steps {
-                sh 'cd /var/www/test-lumen'
-                sh 'git checkout main'
-                sh 'git pull'
-            }
-        }
         stage('Building') {
             steps {
                 sh 'docker exec container_php_fpm composer install'

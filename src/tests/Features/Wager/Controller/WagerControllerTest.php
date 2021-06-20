@@ -125,7 +125,7 @@ class WagerControllerTest extends TestCase
         $this->assertResponseStatus(200);
         $this->assertJson($response->response->getContent());
         $jsonData = json_decode($response->response->getContent(),true);
-        $dataWager = $jsonData["data"];
+        $dataWager = $jsonData["data"]["data"];
         $countWager = count($dataWager);
         $this->assertEquals($maxCreateWager,$countWager);
 

@@ -54,9 +54,12 @@ class WagerRepositoryTest extends TestCase
 
     public function testGetListWager()
     {
-        $result = $this->wagerRepository->getList(1,2)->toArray();
+        $maxCreateWager = 2;
+        $wager = WagerModel::factory($maxCreateWager)->create()->first();
+        $result = $this->wagerRepository->getList(2)->toArray();
+        $result = $result["data"];
         $countResult = count($result);
-        $this->assertEquals(2,$countResult);
+        $this->assertEquals($maxCreateWager,$countResult);
         $this->assertIsArray($result);
         $sampleWager = $result[rand(0,$countResult - 1)];
         //Has Key
