@@ -3,14 +3,13 @@ pipeline {
     stages {
         stage('Building') {
             steps {
-                sh 'echo $(whoami)'
                 sh 'docker exec container_php_fpm composer install'
                 sh 'docker exec container_php_fpm composer --version'
             }
         }
         stage('Testing') {
             steps {
-                sh 'docker exec container_php_fpm compose test'
+                sh 'docker exec container_php_fpm composer test'
             }
         }
         stage('Deploy') {
