@@ -73,9 +73,8 @@ class WagerController extends Controller
 
     public function getList(Request $request)
     {
-        $page = $request->input("page") ?? 1;
         $limit = $request->input("limit") ?? 10;
-        $data = $this->wagerRepositoryContract->getList($page,$limit);
+        $data = $this->wagerRepositoryContract->getList($limit);
         return $this->setResponse(HttpResponseCode::CODE_200,$data->toArray());
     }
 }

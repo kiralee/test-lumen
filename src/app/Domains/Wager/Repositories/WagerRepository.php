@@ -34,11 +34,10 @@ class WagerRepository implements  WagerRepositoryContract
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getList(int $page, int $limit):\Illuminate\Database\Eloquent\Collection
+    public function getList(int $limit): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        $offSet = ($page - 1) * $limit;
-        return $this->model->newQuery()->offset($offSet)->limit($limit)->get();
+        return $this->model->newQuery()->paginate($limit);
     }
 }

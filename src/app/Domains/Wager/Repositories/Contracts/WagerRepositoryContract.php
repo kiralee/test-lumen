@@ -17,8 +17,8 @@ interface WagerRepositoryContract
      */
     public function update(array $params, int $wagerId);
     /**
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getList(int $page, int $limit);
+    public function getList(int $limit);
 
 }
