@@ -15,6 +15,9 @@ pipeline {
                 failure {
                     slackSend (color: "danger", message: "Testing failed")
                 }
+                success {
+                    slackSend (color: "good", message: "Passed All testcases")
+                }
             }
         }
         stage('Deploy to Stagging') {
