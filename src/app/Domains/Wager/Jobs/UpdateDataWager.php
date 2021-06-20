@@ -35,9 +35,9 @@ class UpdateDataWager extends Job implements ShouldQueue
     {
         //Process update
         $params = [
-            "current_selling_price" => 4000,
-            "percentage_sold" => 5,
-            "amount_sold" => 5
+            "current_selling_price" => 9000,
+            "percentage_sold" => 9,
+            "amount_sold" => 9
         ];
         Log::info("Trigger Event".json_encode($params));
         $this->wagerRepositoryContract->update($params,$this->orderModel->wager_id);
