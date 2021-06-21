@@ -14,3 +14,6 @@ docker exec container_php_fpm php artisan migrate
 
 echo "####### Change Mode Storage"
 docker exec container_php_fpm chmod -R 777 storage/
+
+echo "==== SUCCESS BUILD ===="
+echo "Please run application with domain http://127.0.0.1:8888"

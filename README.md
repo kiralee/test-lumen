@@ -4,15 +4,17 @@ Testing lumen with docker composer
 ##Technology
 - Nginx
 - PHP8.0.6
-- Percona Server Mysql
+- Mysql Server
 - Composer 2.0
 ##How to use
 * Run command
 ``` 
-bash start.sh 
+sh start.sh 
 ```
-- Access site with url http://127.0.0.1:4444
-## Structure of table wagers
+- Access site with url http://127.0.0.1:8888
+
+## Structure of tables
+###Wagers
 ```
   +-----------------------+-----------------------+------+-----+-------------------+-----------------------------+
   | Field                 | Type                  | Null | Key | Default           | Extra                       |
@@ -29,4 +31,17 @@ bash start.sh
   | created_at            | timestamp             | YES  |     | NULL              |                             |
   | updated_at            | timestamp             | YES  |     | NULL              |                             |
   +-----------------------+-----------------------+------+-----+-------------------+-----------------------------+
+```
+### Orders
+```
++--------------+-----------------------+------+-----+-------------------+-----------------------------+
+| Field        | Type                  | Null | Key | Default           | Extra                       |
++--------------+-----------------------+------+-----+-------------------+-----------------------------+
+| id           | bigint(20) unsigned   | NO   | PRI | NULL              | auto_increment              |
+| wager_id     | bigint(20) unsigned   | NO   | MUL | NULL              |                             |
+| buying_price | decimal(8,2) unsigned | NO   |     | NULL              |                             |
+| bought_at    | timestamp             | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+| created_at   | timestamp             | YES  |     | NULL              |                             |
+| updated_at   | timestamp             | YES  |     | NULL              |                             |
++--------------+-----------------------+------+-----+-------------------+-----------------------------+
 ```
