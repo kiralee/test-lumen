@@ -15,6 +15,7 @@ class WagerController extends Controller
 {
     /** @var int MAX_INTEGER */
     const MAX_INTEGER = 4294967295;
+
     /** @var int DEFAULT_LIMIT_RECORD  */
     const DEFAULT_LIMIT_RECORD =  10;
 
