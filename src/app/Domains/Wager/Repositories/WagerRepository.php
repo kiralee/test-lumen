@@ -64,6 +64,6 @@ class WagerRepository implements  WagerRepositoryContract
      */
     public function find(int $wagerId):WagerModel
     {
-        return $this->model->newQuery()->findOrFail($wagerId);
+        return $this->model->newQuery()->sharedLock()->findOrFail($wagerId);
     }
 }
