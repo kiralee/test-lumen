@@ -4,7 +4,7 @@ pipeline {
         stage('Building') {
             steps {
                 script {
-                    if (env.BRANCH_NAME !== 'master') {
+                    if (env.BRANCH_NAME !== 'main') {
                         sh 'docker exec container_php_fpm php artisan migrate'
                     }
                     sh 'docker exec container_php_fpm composer install'
