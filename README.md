@@ -1,20 +1,21 @@
 # Test Lumen With Docker
-##Introduce
+## Introduce
 Testing lumen with docker composer
-##Technology
+## Technology
 - Nginx
 - PHP8.0.6
 - Mysql Server
 - Composer 2.0
-##How to use
-* Run command
+## How to use
+
+* Run command to start project
 ``` 
 sh start.sh 
 ```
 - Access site with url http://127.0.0.1:8888
 
 ## Structure of tables
-###Wagers
+### Wagers
 ```
   +-----------------------+-----------------------+------+-----+-------------------+-----------------------------+
   | Field                 | Type                  | Null | Key | Default           | Extra                       |
