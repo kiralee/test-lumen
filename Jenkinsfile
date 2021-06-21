@@ -3,8 +3,13 @@ pipeline {
     stages {
         stage('Building') {
             steps {
-                sh 'docker exec container_php_fpm composer install'
-                sh 'docker exec container_php_fpm composer --version'
+                script {
+                    if (env.BRANCH_NAME !== 'master') {
+                        sh 'docker exec container_php_fpm php artisan migrate'
+                    }
+                    sh 'docker exec container_php_fpm composer install'
+                    sh 'docker exec container_php_fpm composer --version'
+                }
             }
         }
         stage('Testing') {
