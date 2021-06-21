@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="" tests="8" assertions="87" errors="0" warnings="0" failures="0" skipped="0" time="2.802501">
-    <testsuite name="Application Test Suite" tests="8" assertions="87" errors="0" warnings="0" failures="0" skipped="0" time="2.802501">
-      <testsuite name="Tests\Unit\Wager\Repositories\WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" tests="5" assertions="57" errors="0" warnings="0" failures="0" skipped="0" time="2.715104">
-        <testcase name="testCreateWageActionFailBadReqest" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="46" assertions="12" time="1.436793"/>
-        <testcase name="testGetGetListWager" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="119" assertions="16" time="0.462963"/>
-        <testcase name="testBuyWagerFailWith500" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="98" assertions="5" time="0.282314"/>
-        <testcase name="testCreateWageActionSuccess" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="18" assertions="15" time="0.035844"/>
-        <testcase name="testBuyWager" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="76" assertions="9" time="0.497190"/>
+  <testsuite name="" tests="11" assertions="96" errors="0" warnings="0" failures="0" skipped="0" time="2.272469">
+    <testsuite name="Application Test Suite" tests="11" assertions="96" errors="0" warnings="0" failures="0" skipped="0" time="2.272469">
+      <testsuite name="Tests\Unit\Wager\Repositories\WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" tests="8" assertions="66" errors="0" warnings="0" failures="0" skipped="0" time="2.184447">
+        <testcase name="testCreateWageActionFailBadReqest" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="52" assertions="12" time="1.389808"/>
+        <testcase name="testCreateWageActionSuccess" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="22" assertions="15" time="0.406583"/>
+        <testcase name="testBuyWager" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="82" assertions="10" time="0.165270"/>
+        <testcase name="testGetGetListWager" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="181" assertions="16" time="0.054814"/>
+        <testcase name="testBuyWagerError422WithNegativeNumber" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="115" assertions="3" time="0.039857"/>
+        <testcase name="testBuyWagerError422WithOverRange" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="131" assertions="3" time="0.041791"/>
+        <testcase name="testBuyWagerError422WithModelFoundAndOverCurrentSellingPrice" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="147" assertions="4" time="0.039707"/>
+        <testcase name="testBuyWagerError422WithModelNotFound" class="Tests\Unit\Wager\Repositories\WagerControllerTest" classname="Tests.Unit.Wager.Repositories.WagerControllerTest" file="/var/www/src/tests/Features/Wager/Controller/WagerControllerTest.php" line="164" assertions="3" time="0.046617"/>
       </testsuite>
-      <testsuite name="Tests\Unit\Wager\Repositories\WagerRepositoryTest" file="/var/www/src/tests/Units/Wager/Repositories/WagerRepositoryTest.php" tests="2" assertions="29" errors="0" warnings="0" failures="0" skipped="0" time="0.056125">
-        <testcase name="testCreateWage" class="Tests\Unit\Wager\Repositories\WagerRepositoryTest" classname="Tests.Unit.Wager.Repositories.WagerRepositoryTest" file="/var/www/src/tests/Units/Wager/Repositories/WagerRepositoryTest.php" line="21" assertions="14" time="0.028686"/>
-        <testcase name="testGetListWager" class="Tests\Unit\Wager\Repositories\WagerRepositoryTest" classname="Tests.Unit.Wager.Repositories.WagerRepositoryTest" file="/var/www/src/tests/Units/Wager/Repositories/WagerRepositoryTest.php" line="55" assertions="15" time="0.027439"/>
+      <testsuite name="Tests\Unit\Wager\Repositories\WagerRepositoryTest" file="/var/www/src/tests/Units/Wager/Repositories/WagerRepositoryTest.php" tests="2" assertions="29" errors="0" warnings="0" failures="0" skipped="0" time="0.060529">
+        <testcase name="testCreateWage" class="Tests\Unit\Wager\Repositories\WagerRepositoryTest" classname="Tests.Unit.Wager.Repositories.WagerRepositoryTest" file="/var/www/src/tests/Units/Wager/Repositories/WagerRepositoryTest.php" line="21" assertions="14" time="0.024500"/>
+        <testcase name="testGetListWager" class="Tests\Unit\Wager\Repositories\WagerRepositoryTest" classname="Tests.Unit.Wager.Repositories.WagerRepositoryTest" file="/var/www/src/tests/Units/Wager/Repositories/WagerRepositoryTest.php" line="55" assertions="15" time="0.036029"/>
       </testsuite>
-      <testsuite name="ExampleTest" file="/var/www/src/tests/ExampleTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.031272">
-        <testcase name="testExample" class="ExampleTest" classname="ExampleTest" file="/var/www/src/tests/ExampleTest.php" line="13" assertions="1" time="0.031272"/>
+      <testsuite name="ExampleTest" file="/var/www/src/tests/ExampleTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.027493">
+        <testcase name="testExample" class="ExampleTest" classname="ExampleTest" file="/var/www/src/tests/ExampleTest.php" line="13" assertions="1" time="0.027493"/>
       </testsuite>
     </testsuite>
   </testsuite>

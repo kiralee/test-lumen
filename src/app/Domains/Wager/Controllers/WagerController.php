@@ -1,18 +1,23 @@
 <?php
 namespace App\Domains\Wager\Controllers;
 
-use App\Domains\Order\Models\OrderModel;
-use App\Domains\Order\Repositories\Contracts\OrderRepositoryContract;
-use App\Domains\Support\Facades\HttpResponseCode;
-use App\Domains\Wager\Jobs\UpdateDataWager;
-use App\Domains\Wager\Repositories\Contracts\WagerRepositoryContract;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
+use App\Domains\Order\Models\OrderModel;
+use App\Domains\Order\Repositories\Contracts\OrderRepositoryContract;
+use App\Domains\Support\Facades\HttpResponseCode;
+use App\Domains\Wager\Repositories\Contracts\WagerRepositoryContract;
+use App\Domains\Wager\Rules\LessOrEqualCurrentSellingPriceRule;
+use Illuminate\Support\Facades\DB;
 
 class WagerController extends Controller
 {
+    /** @var int MAX_INTEGER */
+    const MAX_INTEGER = 4294967295;
+    /** @var int DEFAULT_LIMIT_RECORD  */
+    const DEFAULT_LIMIT_RECORD =  10;
+
     /** @var WagerRepositoryContract  */
     protected $wagerRepositoryContract;
 
@@ -29,9 +34,9 @@ class WagerController extends Controller
     {
         $this->validate($request, [
             'total_wager_value' => "required|integer|gt:0",
-            'odds' => 'required|integer|gt:0',
+            'odds' => 'required|integer|gt:0|max:'.self::MAX_INTEGER,
             'selling_percentage' => 'required|integer|between:1,100',
-            'selling_price' => 'required|between:0,999999.99|gt:total_wager_value'
+            'selling_price' => 'required|gt:0|between:0,999999.99|gt:total_wager_value'
         ]);
         try {
             $postParams = $request->all();
@@ -53,7 +58,7 @@ class WagerController extends Controller
     public function buy(Request $request,int $wagerId)
     {
         $this->validate($request, [
-            'buying_price' => 'required|between:0,999999.99'
+            'buying_price' => ['required','gt:0','between:0,999999.99', new LessOrEqualCurrentSellingPriceRule($this->wagerRepositoryContract, $wagerId)],
         ]);
         try {
             $postParams = $request->all();
@@ -62,10 +67,18 @@ class WagerController extends Controller
                 "bought_at" => Carbon::now()
             ]);
             /** @var OrderModel $order */
+            DB::beginTransaction();
             $order = $this->orderRepositoryContract->create($params);
-            $this->dispatch(new UpdateDataWager($this->wagerRepositoryContract, $order));
+            //Handle update wager
+
+            $paramsForUpdateWager = [
+                "current_selling_price" => $order->buying_price, //Current selling price should be buying_price
+            ];
+            $this->wagerRepositoryContract->update($paramsForUpdateWager,$wagerId);
+            DB::commit();
             return $this->setResponse(HttpResponseCode::CODE_201,$order->toArray());
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->setResponse(HttpResponseCode::CODE_500,[],$e);
         }
 
@@ -73,7 +86,7 @@ class WagerController extends Controller
 
     public function getList(Request $request)
     {
-        $limit = $request->input("limit") ?? 10;
+        $limit = $request->input("limit") ?? self::DEFAULT_LIMIT_RECORD;
         $data = $this->wagerRepositoryContract->getList($limit);
         return $this->setResponse(HttpResponseCode::CODE_200,$data->toArray());
     }

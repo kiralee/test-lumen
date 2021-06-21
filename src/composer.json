@@ -36,9 +36,6 @@
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
-        "test-unit": [
-            "./vendor/bin/phpunit"
-        ],
         "generate-report-html": [
             "./vendor/bin/phpunit --coverage-html reports/"
         ],

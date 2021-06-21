@@ -29,8 +29,5 @@ RUN apt-get update \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 WORKDIR /var/www/src
-COPY src/ /var/www/src
-#RUN composer install
-RUN nohup php artisan queue:work --daemon &
-#CMD ["nohup","php","artisan","queue:listen","--daemon","&"]

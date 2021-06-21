@@ -10,18 +10,23 @@ use TestCase;
 
 class WagerControllerTest extends TestCase
 {
+    /** @var WagerRepositoryContract */
+    protected $wagerRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
+        $this->wagerRepository = app(WagerRepositoryContract::class);
     }
 
     public function testCreateWageActionSuccess()
     {
+        $faker = Factory::create();
         $postData = [
-            'total_wager_value' => 1111,
-            'odds' => 234,
-            'selling_percentage' => 89,
-            'selling_price' => 999999.99,
+            'total_wager_value' => $faker->randomNumber(3),
+            'odds' => $faker->randomNumber(3),
+            'selling_percentage' => $faker->randomNumber(2),
+            'selling_price' => $faker->randomFloat(2,0,999999.99)
         ];
         $response = $this->post("/wagers/",$postData);
         $this->assertResponseStatus(201);
@@ -43,6 +48,7 @@ class WagerControllerTest extends TestCase
         $this->assertIsFloat($dataWager['selling_price']);
         $this->assertIsFloat($dataWager['current_selling_price']);
     }
+
     public function testCreateWageActionFailBadReqest()
     {
         $faker = Factory::create();
@@ -77,43 +83,99 @@ class WagerControllerTest extends TestCase
     {
         /** @var WagerModel $wager */
         $wager = WagerModel::factory(1)->create()->first();
-        $faker = Factory::create();
         $postData = [
-            'buying_price' => $faker->randomFloat(2,0,9999.99),
+            'buying_price' => 50,
         ];
         $response = $this->post("/wagers/buy/".$wager->id,$postData);
         $this->assertResponseStatus(201);
         $this->assertJson($response->response->getContent());
-        $jsonData = json_decode($response->response->getContent(),true);
+        $jsonData = \json_decode($response->response->getContent(),true);
         $dataOrder = $jsonData["data"];
         $this->assertArrayHasKey("buying_price",$dataOrder);
         $this->assertArrayHasKey("wager_id",$dataOrder);
         $this->assertArrayHasKey("id",$dataOrder);
         $this->assertArrayHasKey("bought_at",$dataOrder);
         $this->assertEquals($wager->id,$dataOrder["wager_id"]);
-        //Correct Value Type
-        $this->assertIsInt($dataOrder['wager_id']);
-        $this->assertIsFloat($dataOrder['buying_price']);
+        //Check wagers after update
+
+        //Calculate
+        $sellingPrice = $wager->selling_price;
+        $amountSold = $wager->amount_sold + $dataOrder['buying_price'];
+        $percentageSold = round(($amountSold / $sellingPrice) * 100,2);
+
+        //Get Updated Wager
+        $updatedWager = $this->wagerRepository->find($wager->id);
+
+        $this->assertEquals($updatedWager->current_selling_price,$dataOrder['buying_price']);
+        $this->assertEquals($amountSold,$updatedWager->amount_sold);
+        $this->assertEquals($percentageSold,$updatedWager->percentage_sold);
+
     }
-    public function testBuyWagerFailWith500()
+
+    public function testBuyWagerError422WithNegativeNumber()
+    {
+        /** @var WagerModel $wager */
+        $wager = WagerModel::factory(1)->create()->first();
+        $wagerId = $wager->id;
+        $postData = [
+            'buying_price' => -999,
+        ];
+        //Query with wager id that not belong to wagers table
+        $response = $this->post("/wagers/buy/".$wagerId,$postData);
+        $this->assertResponseStatus(422);
+        $this->assertJson($response->response->getContent());
+        $messages = json_decode($response->response->getContent(),true);
+        $this->assertArrayHasKey("buying_price",$messages);
+    }
+
+    public function testBuyWagerError422WithOverRange()
+    {
+        /** @var WagerModel $wager */
+        $wager = WagerModel::factory(1)->create()->first();
+        $wagerId = $wager->id;
+        $postData = [
+            'buying_price' => 99999999999,
+        ];
+        //Query with wager id that not belong to wagers table
+        $response = $this->post("/wagers/buy/".$wagerId,$postData);
+        $this->assertResponseStatus(422);
+        $this->assertJson($response->response->getContent());
+        $messages = json_decode($response->response->getContent(),true);
+        $this->assertArrayHasKey("buying_price",$messages);
+    }
+
+    public function testBuyWagerError422WithModelFoundAndOverCurrentSellingPrice()
+    {
+        /** @var WagerModel $wager */
+        $wager = WagerModel::factory(1)->create()->first();
+        $wagerId = $wager->id;
+        $postData = [
+            'buying_price' => 999999.99,
+        ];
+        //Query with wager id that not belong to wagers table
+        $response = $this->post("/wagers/buy/".$wagerId,$postData);
+        $this->assertResponseStatus(422);
+        $this->assertJson($response->response->getContent());
+        $messages = json_decode($response->response->getContent(),true);
+        $this->assertArrayHasKey("buying_price",$messages);
+        $this->assertEquals("The buying price must be less or equal with current_selling_price or wager not found",$messages["buying_price"][0]);
+    }
+
+    public function testBuyWagerError422WithModelNotFound()
     {
         /** @var WagerModel $wager */
         $wager = WagerModel::factory(1)->create()->first();
         $faker = Factory::create();
         $postData = [
-            'buying_price' => $faker->randomFloat(2,0,9999.99),
+            'buying_price' => 1,
         ];
         //Query with wager id that not belong to wagers table
         $randomId = 9999999999999;
         $response = $this->post("/wagers/buy/".$randomId,$postData);
-        $this->assertResponseStatus(500);
-        $this->assertJson($response->response->getContent());
-        $jsonData = json_decode($response->response->getContent(),true);
-        $dataOrder = $jsonData["data"];
-        $error = $jsonData["error"];
-        $this->assertEmpty($dataOrder);
-        $this->assertArrayHasKey("message",$error);
-        $this->assertNotEmpty($error);
+        $this->assertResponseStatus(422);
+        $messages = json_decode($response->response->getContent(),true);
+        $this->assertArrayHasKey("buying_price",$messages);
+        $this->assertEquals("The buying price must be less or equal with current_selling_price or wager not found",$messages["buying_price"][0]);
     }
 
     public function testGetGetListWager()

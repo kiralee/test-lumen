@@ -20,7 +20,7 @@ class CreateTableWagers extends Migration
             $table->integer("selling_percentage")->unsigned();
             $table->decimal("selling_price")->unsigned();
             $table->decimal("current_selling_price")->unsigned()->nullable();
-            $table->integer("percentage_sold")->unsigned()->nullable();
+            $table->decimal("percentage_sold")->unsigned()->nullable();
             $table->decimal("amount_sold")->nullable()->nullable();
             $table->timestamp("placed_at");
             $table->timestamps();

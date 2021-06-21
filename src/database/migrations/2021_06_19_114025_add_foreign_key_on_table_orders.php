@@ -26,7 +26,7 @@ class AddForeignKeyOnTableOrders extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign("wager_id");
+            $table->dropForeign(["wager_id"]);
         });
     }
 }
