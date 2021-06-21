@@ -2,14 +2,14 @@ pipeline {
     agent any
     stages {
         stage('Building') {
+            echo env.BRANCH_NAME;
             steps {
-                script {
-                    if (env.BRANCH_NAME != 'main') {
-                        sh 'docker exec container_php_fpm php artisan migrate'
-                    }
-                    sh 'docker exec container_php_fpm composer install'
-                    sh 'docker exec container_php_fpm composer --version'
+            echo env.BRANCH_NAME;
+                if (env.BRANCH_NAME != 'main') {
+                    sh 'docker exec container_php_fpm php artisan migrate'
                 }
+                sh 'docker exec container_php_fpm composer install'
+                sh 'docker exec container_php_fpm composer --version'
             }
         }
         stage('Testing') {
