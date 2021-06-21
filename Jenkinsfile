@@ -2,7 +2,6 @@ pipeline {
     agent any
     stages {
         stage('Building') {
-            echo env.BRANCH_NAME;
             steps {
             echo env.BRANCH_NAME;
                 if (env.BRANCH_NAME != 'main') {
